@@ -4,10 +4,16 @@
 unsigned char j;
 
 void main(void) {
-    /*TRISB = 0b11110000; //RB5 to RB3 are connected to On/Off switches
+    TRISB = 0b11111111; //RB5 to RB3 are connected to On/Off switches
     TRISD = 0b00000000; //RD7 to RD0 are connected to LEDs
+    ldrTest();
+    return;
     
-    // LDR, light decrease resistance --> light, 5v
+    
+    
+}
+
+int ldrTest(){              //This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
     while (1){
         if (PORTBbits.RB3 == 1)  {
             PORTD = 0xFF; //light up all the LEDs on the PIC18 board
@@ -17,24 +23,37 @@ void main(void) {
             delay_ms(1000);
         }
     }
-    return;*/
-    
-    TRISD = 0b00000000; // make PORT D an output port
-while (1)
- {
+    return 0;
+}
+//RB5 is for Moisture sensor
+    //When moisture sensor is dry, it reads 0
+    //When moisture sensor is wet, it reads 1
+    //PORTBbits.RB5
+int moistureTest(){         //This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
+    while(1){
+        if(PORTBbits.RB5 ==1){
+            PORTD=0xFF;
+            delay_ms(1000);
+        }else{
+            PORTD =0x00;
+            delay_ms(1000);
+        }
+    }
+    return 0;
+}
+
+int motorTest(){
+    while (1){
  // the PORTD bits: --In3 In4 En2 In2 In1 En1
- PORTD= 0b00101011; // turns both motors
- delay_ms(1000);
- PORTDbits.RD5 = 0; PORTDbits.RD4 = 1; // reverses Motor 2
- delay_ms(1000);
- PORTDbits.RD0 = 0; // stops Motor1
- delay_ms(1000);
- PORTDbits.RD3 = 0; // stops Motor2
-  delay_ms(1000);
-
+        PORTD= 0b00101011; // turns both motors
+        delay_ms(1000);
+        PORTDbits.RD5 = 0; PORTDbits.RD4 = 1; // reverses Motor 2
+        delay_ms(1000);
+        PORTDbits.RD0 = 0; // stops Motor1
+        delay_ms(1000);
+        PORTDbits.RD3 = 0; // stops Motor2
+        delay_ms(1000);
+    }
+    return 0;
 }
-    
-    
-}
-
 
