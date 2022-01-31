@@ -6,6 +6,8 @@ unsigned char j;
 void main(void) {
     TRISB = 0b11111111; //RB5 to RB3 are connected to On/Off switches
     TRISD = 0b00000000; //RD7 to RD0 are connected to LEDs
+    INTCONbits.GIE = 1; //enable global interrupt (master switch)
+    INTCONbits.INT0IE = 1; //interrupt enable for RB0
     comeback();
     
     return;
@@ -77,5 +79,12 @@ int comeback(){
             return;
         } 
     }
+}
+
+void interrupt overrideButton_isr(void) {
+    //for now we do emergency stop
+    INTCONbits.INT0IF = 0; //clear flag
+    PORTDbits.RD0 = 0; // stops Motor1
+    PORTDbits.RD3 = 0; // stops Motor2
 }
 
