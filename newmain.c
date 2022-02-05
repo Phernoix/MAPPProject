@@ -64,27 +64,30 @@ int motorTest(){
 }
 
 int comeback(){
-    while (1){
         if (PORTBbits.RB3== 0 && PORTBbits.RB5==1){
             PORTD= 0b00101011; // turns both motors
             delay_ms(5000);
-            PORTDbits.RD5 = 0; PORTDbits.RD4 = 1; // reverses Motor 2
-            delay_ms(5000);
-            PORTDbits.RD0 = 0; // stops Motor1
-            delay_ms(5000);
-            PORTDbits.RD3 = 0; // stops Motor2
+            
+            PORTDbits.RD0 = 0;
+            PORTDbits.RD3 = 0; // stops Motor1
             delay_ms(5000);
             
         } else{
             return;
         } 
-    }
+    
 }
 
 void interrupt overrideButton_isr(void) {
     //for now we do emergency stop
     INTCONbits.INT0IF = 0; //clear flag
-    PORTDbits.RD0 = 0; // stops Motor1
-    PORTDbits.RD3 = 0; // stops Motor2
+    PORTDbits.RD5 = 0; //
+    PORTDbits.RD4 = 1;
+    PORTDbits.RD1 = 0; 
+    PORTDbits.RD2 = 1;
+    delay_ms(5000);
+    PORTDbits.RD0 =0;
+    PORTDbits.RD3 =0;
+    
 }
 
