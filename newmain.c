@@ -7,7 +7,7 @@ void main(void) {
     TRISB = 0b11111111; //RB5 to RB3 are connected to On/Off switches
     TRISD = 0b00000000; //RD7 to RD0 are connected to LEDs
     INTCONbits.GIE = 1; //enable global interrupt (master switch)
-    INTCONbits.INT0IE = 1; //interrupt enable for RB0
+    INTCON3bits.INT2IE = 1; //interrupt enable for RB2
     comeback();
     
     return;
@@ -80,7 +80,7 @@ int comeback(){
 
 void interrupt overrideButton_isr(void) {
     //for now we do emergency stop
-    INTCONbits.INT0IF = 0; //clear flag
+    INTCON3bits.INT2IF = 0; //clear flag
     PORTDbits.RD5 = 0; //
     PORTDbits.RD4 = 1;
     PORTDbits.RD1 = 0; 
