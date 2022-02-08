@@ -10,6 +10,7 @@ void main(void) {
     INTCONbits.INT0IE = 1;
     
     while(1) {
+        if (isDark() && isWet())
             comeback();
     }
     
