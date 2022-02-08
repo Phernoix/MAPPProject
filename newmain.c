@@ -6,9 +6,9 @@ unsigned char j;
 void main(void) {
     TRISB = 0b11111111; //RB5 to RB3 are connected to On/Off switches
     TRISD = 0b00000000; //RD7 to RD0 are connected to LEDs
-    TRISA = 0b00000000; //RD7 to RD0 are connected to LEDs
-    PORTAbits.RA0 = 1;
-    comeback();
+    INTCONbits.GIE = 1;
+    INTCONbits.INT0IE = 1;
+    while(1);
     
     return;
     
@@ -78,8 +78,7 @@ int comeback(){
 
 
 void interrupt overrideButton_isr(void) {
-    //for now we do emergency stop
-    INTCON3bits.INT2IF = 0; //clear flag
+    INTCONbits.INT0IF = 0; //clear flag
     PORTDbits.RD5 = 0; //
     PORTDbits.RD4 = 1;
     PORTDbits.RD1 = 0; 
@@ -87,5 +86,4 @@ void interrupt overrideButton_isr(void) {
     delay_ms(5000);
     PORTDbits.RD0 =0;
     PORTDbits.RD3 =0;
-    
 }
