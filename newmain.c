@@ -1,7 +1,9 @@
 #include <xc.h>
 #include "delays.h"
 
-unsigned char j;
+int isDark();
+int isWet();
+void interrupt overrideButton_isr(void);
 
 void main(void) {
     TRISB = 0b11111111;     // RB5 to RB3 are connected to On/Off switches
@@ -14,9 +16,7 @@ void main(void) {
             comeback();
     }
     
-    return;
-    
-    
+    return;  
 }
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
  * When LDR reads 0, it means it is bright (there is light)
@@ -33,7 +33,8 @@ int isDark(){
     * When moisture sensor is wet, it reads 1
     * PORTBbits.RB5 
  */
-int isWet(){         //This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
+//This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
+int isWet(){         
         if(PORTBbits.RB5 == 1)
             return 1;
     return 0;
@@ -52,10 +53,9 @@ int comeback(){
     }
 }
 
-
 void interrupt overrideButton_isr(void) {
     INTCONbits.INT0IF = 0; //clear flag
-    PORTDbits.RD5 = 0; //
+    PORTDbits.RD5 = 0; 
     PORTDbits.RD4 = 1;
     PORTDbits.RD1 = 0; 
     PORTDbits.RD2 = 1;
