@@ -8,7 +8,10 @@ void main(void) {
     TRISD = 0b00000000; //RD7 to RD0 are connected to LEDs
     INTCONbits.GIE = 1;
     INTCONbits.INT0IE = 1;
-    while(1);
+    
+    while(1) {
+            comeback();
+    }
     
     return;
     
@@ -19,32 +22,18 @@ void main(void) {
 //When LDR reads 1, it means it is dim
 
 
-int ldrTest(){              
-    while (1){
-        if (PORTBbits.RB3 == 1)  { // 1
-            PORTD = 0xFF; //light up all the LEDs on the PIC18 board
-            delay_ms(1000);
-        } else {
-            PORTD = 0x00;
-            delay_ms(1000);
-        }
-    }
+int isDark(){              
+        if (PORTBbits.RB3 == 1) // 1
+            return 1;
     return 0;
 }
 //RB5 is for Moisture sensor
     //When moisture sensor is dry, it reads 0
     //When moisture sensor is wet, it reads 1
     //PORTBbits.RB5
-int moistureTest(){         //This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
-    while(1){
-        if(PORTBbits.RB5 ==1){
-            PORTD=0xFF;
-            delay_ms(1000);
-        }else{
-            PORTD =0x00;
-            delay_ms(1000);
-        }
-    }
+int isWet(){         //This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
+        if(PORTBbits.RB5 == 1)
+            return 1;
     return 0;
 }
 
