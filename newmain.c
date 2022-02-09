@@ -10,6 +10,7 @@
 #define MOTOR2_EN2 PORTDbits.RD3
 #define MOTOR2_IN4 PORTDbits.RD4
 #define MOTOR2_IN3 PORTDbits.RD5
+#define MOTOR_TIME 250
 
 int isDark();
 int isWet();
@@ -26,16 +27,23 @@ void main(void) {
     INTCONbits.GIE = 1;     // Enable global interrupt
     INTCONbits.INT0IE = 1;  // Enable int for RB0
     
-    while(1) {
-        //if (isDark() && isWet())
-            //moveMotor(3);
-        //else 
-            //disableMotors();
-        
+    /*while(1) {
+        if (isDark() && isWet())  {
+            moveMotor(2);
+            delay_ms(MOTOR_TIME);
+        }
+        else{
+            disableMotors();
+        }
     }
-        
+     */
+    while (1) { 
+        if (isDark())
+            moveMotor(2);
+    }
     return;  
 }
+ 
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
  * When LDR reads 0, it means it is bright (there is light)
  * When LDR reads 1, it means it is dim
@@ -63,7 +71,7 @@ int isWet() {
 
 void interrupt overrideButton_isr(void) {
     INTCONbits.INT0IF = 0;      //clear flag
-    moveMotor(3);
+    moveMotor_Opposite(2);
 }
 
 void enableMotors() {
@@ -85,14 +93,19 @@ void moveMotor(int motor) {
     if (motor == 1) {
         MOTOR1_IN1 = 1;
         MOTOR1_IN2 = 0;
+        delay_ms(MOTOR_TIME);
     } else if (motor == 2) {
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
+        delay_ms(MOTOR_TIME);
+
     } else {
         MOTOR1_IN1 = 1;
         MOTOR1_IN2 = 0;
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
+        delay_ms(MOTOR_TIME);
+
     }
     return;
 
@@ -103,15 +116,19 @@ void moveMotor_Opposite(int motor) {
     if (motor == 1) {
         MOTOR1_IN1 = 0;
         MOTOR1_IN2 = 1;
+        delay_ms(MOTOR_TIME);
     } else if (motor == 2) {
         MOTOR2_IN3 = 0;
         MOTOR2_IN4 = 1;
+        delay_ms(MOTOR_TIME);
     } else {
         MOTOR1_IN1 = 0;
         MOTOR1_IN2 = 1;
         MOTOR2_IN3 = 0;
         MOTOR2_IN4 = 1;
-    }
+        delay_ms(MOTOR_TIME);
+           
+    } 
     return;
 }
 
