@@ -1,11 +1,24 @@
 #include <xc.h>
 #include "delays.h"
+#include <stdbool.h>
+
 #define LDR PORTBbits.RB3
 #define MOIST_SENS PORTBbits.RB5
+#define MOTOR1_EN1 PORTDbits.RD0
+#define MOTOR1_IN1 PORTDbits.RD1
+#define MOTOR1_IN2 PORTDbits.RD2
+#define MOTOR2_EN2 PORTDbits.RD3
+#define MOTOR2_IN4 PORTDbits.RD4
+#define MOTOR2_IN3 PORTDbits.RD5
 
 int isDark();
 int isWet();
 void interrupt overrideButton_isr(void);
+void enableMotors();
+void disableMotors();
+void moveMotor(int motor);
+void moveMotor_Opposite(int motor);
+
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
@@ -14,10 +27,13 @@ void main(void) {
     INTCONbits.INT0IE = 1;  // Enable int for RB0
     
     while(1) {
-        if (isDark() && isWet())
-            comeback();
+        //if (isDark() && isWet())
+            //moveMotor(3);
+        //else 
+            //disableMotors();
+        
     }
-    
+        
     return;  
 }
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
@@ -27,6 +43,7 @@ void main(void) {
 int isDark() {              
     if (LDR == 1)
         return 1;
+    
     return 0;
 }
 
@@ -39,29 +56,63 @@ int isDark() {
 int isWet() {         
     if(MOIST_SENS == 1)
         return 1;
+    
     return 0;
 }
 
-int comeback() {
-    while (1){
-        PORTD= 0b00101011; // turns both motors
-        delay_ms(5000);
-        PORTDbits.RD5 = 0; PORTDbits.RD4 = 1; // reverses Motor 2
-        delay_ms(5000);
-        PORTDbits.RD0 = 0; // stops Motor1
-        delay_ms(5000);
-        PORTDbits.RD3 = 0; // stops Motor2
-        delay_ms(5000);
-    }
-}
 
 void interrupt overrideButton_isr(void) {
-    INTCONbits.INT0IF = 0; //clear flag
-    PORTDbits.RD5 = 0; 
-    PORTDbits.RD4 = 1;
-    PORTDbits.RD1 = 0; 
-    PORTDbits.RD2 = 1;
-    delay_ms(5000);
-    PORTDbits.RD0 =0;
-    PORTDbits.RD3 =0;
+    INTCONbits.INT0IF = 0;      //clear flag
+    moveMotor(3);
 }
+
+void enableMotors() {
+    MOTOR1_EN1 = 1;
+    MOTOR2_EN2 = 1;
+    
+    return;
+}
+
+void disableMotors() {
+    MOTOR1_EN1 = 0;
+    MOTOR2_EN2 = 0;
+    
+    return;
+}
+
+void moveMotor(int motor) {
+    enableMotors();
+    if (motor == 1) {
+        MOTOR1_IN1 = 1;
+        MOTOR1_IN2 = 0;
+    } else if (motor == 2) {
+        MOTOR2_IN3 = 1;
+        MOTOR2_IN4 = 0;
+    } else {
+        MOTOR1_IN1 = 1;
+        MOTOR1_IN2 = 0;
+        MOTOR2_IN3 = 1;
+        MOTOR2_IN4 = 0;
+    }
+    return;
+
+}
+
+void moveMotor_Opposite(int motor) {
+    enableMotors();
+    if (motor == 1) {
+        MOTOR1_IN1 = 0;
+        MOTOR1_IN2 = 1;
+    } else if (motor == 2) {
+        MOTOR2_IN3 = 0;
+        MOTOR2_IN4 = 1;
+    } else {
+        MOTOR1_IN1 = 0;
+        MOTOR1_IN2 = 1;
+        MOTOR2_IN3 = 0;
+        MOTOR2_IN4 = 1;
+    }
+    return;
+}
+
+
