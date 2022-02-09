@@ -9,7 +9,6 @@
 #define MOTOR2_EN2 PORTDbits.RD3
 #define MOTOR2_IN4 PORTDbits.RD4
 #define MOTOR2_IN3 PORTDbits.RD5
-#define MOTOR_TIME 250
 
 int isDark(void);
 int isWet(void);
@@ -19,6 +18,7 @@ void disableMotors(void);
 void moveMotor(int motor);
 void moveMotor_Opposite(int motor);
 
+int motorTime = 250;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
@@ -72,6 +72,11 @@ void interrupt overrideButton_isr(void) {
     moveMotor_Opposite(2);
 }
 
+
+/* Code for Motor:
+ * We are using a H bridge for the motor
+ * https://www.modularcircuits.com/blog/articles/h-bridge-secrets/h-bridges-the-basics
+ */
 void enableMotors(void) {
     MOTOR1_EN1 = 1;
     MOTOR2_EN2 = 1;    
@@ -87,18 +92,17 @@ void moveMotor(int motor) {
     if (motor == 1) {
         MOTOR1_IN1 = 1;
         MOTOR1_IN2 = 0;
-        delay_ms(MOTOR_TIME);
     } else if (motor == 2) {
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
-        delay_ms(MOTOR_TIME);
     } else {
         MOTOR1_IN1 = 1;
         MOTOR1_IN2 = 0;
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
-        delay_ms(MOTOR_TIME);
     }
+    delay_ms(motorTime);
+    disableMotors();
 }
 
 void moveMotor_Opposite(int motor) {
@@ -106,18 +110,17 @@ void moveMotor_Opposite(int motor) {
     if (motor == 1) {
         MOTOR1_IN1 = 0;
         MOTOR1_IN2 = 1;
-        delay_ms(MOTOR_TIME);
     } else if (motor == 2) {
         MOTOR2_IN3 = 0;
         MOTOR2_IN4 = 1;
-        delay_ms(MOTOR_TIME);
     } else {
         MOTOR1_IN1 = 0;
         MOTOR1_IN2 = 1;
         MOTOR2_IN3 = 0;
         MOTOR2_IN4 = 1;
-        delay_ms(MOTOR_TIME);           
     } 
+    delay_ms(motorTime);
+    disableMotors();
 }
 
 
