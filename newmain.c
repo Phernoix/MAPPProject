@@ -1,6 +1,5 @@
 #include <xc.h>
 #include "delays.h"
-#include <stdbool.h>
 
 #define LDR PORTBbits.RB3
 #define MOIST_SENS PORTBbits.RB5
@@ -12,11 +11,11 @@
 #define MOTOR2_IN3 PORTDbits.RD5
 #define MOTOR_TIME 250
 
-int isDark();
-int isWet();
+int isDark(void);
+int isWet(void);
 void interrupt overrideButton_isr(void);
-void enableMotors();
-void disableMotors();
+void enableMotors(void);
+void disableMotors(void);
 void moveMotor(int motor);
 void moveMotor_Opposite(int motor);
 
@@ -41,7 +40,6 @@ void main(void) {
         if (isDark())
             moveMotor(2);
     }
-    return;  
 }
  
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
@@ -61,7 +59,7 @@ int isDark() {
     * PORTBbits.RB5 
  */
 //This code lights up all LEDs at PORTD if the moisture sensor reads 1 (wet)
-int isWet() {         
+int isWet(void) {         
     if(MOIST_SENS == 1)
         return 1;
     
@@ -74,18 +72,14 @@ void interrupt overrideButton_isr(void) {
     moveMotor_Opposite(2);
 }
 
-void enableMotors() {
+void enableMotors(void) {
     MOTOR1_EN1 = 1;
-    MOTOR2_EN2 = 1;
-    
-    return;
+    MOTOR2_EN2 = 1;    
 }
 
-void disableMotors() {
+void disableMotors(void) {
     MOTOR1_EN1 = 0;
     MOTOR2_EN2 = 0;
-    
-    return;
 }
 
 void moveMotor(int motor) {
@@ -98,17 +92,13 @@ void moveMotor(int motor) {
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
         delay_ms(MOTOR_TIME);
-
     } else {
         MOTOR1_IN1 = 1;
         MOTOR1_IN2 = 0;
         MOTOR2_IN3 = 1;
         MOTOR2_IN4 = 0;
         delay_ms(MOTOR_TIME);
-
     }
-    return;
-
 }
 
 void moveMotor_Opposite(int motor) {
@@ -126,10 +116,8 @@ void moveMotor_Opposite(int motor) {
         MOTOR1_IN2 = 1;
         MOTOR2_IN3 = 0;
         MOTOR2_IN4 = 1;
-        delay_ms(MOTOR_TIME);
-           
+        delay_ms(MOTOR_TIME);           
     } 
-    return;
 }
 
 
