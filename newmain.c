@@ -66,6 +66,7 @@ void interrupt overrideButton_isr(void) {
     if (outside) {
         INTCONbits.INT0IF = 0;      //clear flag
         moveMotor_Opposite();
+        outside = false;
     }
 }
 
