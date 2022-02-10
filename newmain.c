@@ -1,5 +1,6 @@
 #include <xc.h>
 #include "delays.h"
+#include <stdbool.h> 
 
 #define LDR PORTBbits.RB3
 #define MOIST_SENS PORTBbits.RB5
@@ -15,31 +16,25 @@ int isWet(void);
 void interrupt overrideButton_isr(void);
 void enableMotors(void);
 void disableMotors(void);
-void moveMotor(int motor);
-void moveMotor_Opposite(int motor);
+void moveMotor(void);
+void moveMotor_Opposite(void);
 
-int motorTime = 250;
+int motorTime = 1000;
+bool outside = false;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
     TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
     INTCONbits.GIE = 1;     // Enable global interrupt
     INTCONbits.INT0IE = 1;  // Enable int for RB0
-    
-    /*while(1) {
+
+    while(1) {
         if (isDark() && isWet())  {
-            moveMotor(2);
-            delay_ms(MOTOR_TIME);
-        }
-        else{
-            disableMotors();
+            moveMotor();
+            outside = true;
         }
     }
-     */
-    while (1) { 
-        if (isDark())
-            moveMotor(2);
-    }
+    
 }
  
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
@@ -68,8 +63,10 @@ int isWet(void) {
 
 
 void interrupt overrideButton_isr(void) {
-    INTCONbits.INT0IF = 0;      //clear flag
-    moveMotor_Opposite(2);
+    if (outside) {
+        INTCONbits.INT0IF = 0;      //clear flag
+        moveMotor_Opposite();
+    }
 }
 
 
@@ -87,38 +84,22 @@ void disableMotors(void) {
     MOTOR2_EN2 = 0;
 }
 
-void moveMotor(int motor) {
+void moveMotor(void) {
     enableMotors();
-    if (motor == 1) {
-        MOTOR1_IN1 = 1;
-        MOTOR1_IN2 = 0;
-    } else if (motor == 2) {
-        MOTOR2_IN3 = 1;
-        MOTOR2_IN4 = 0;
-    } else {
-        MOTOR1_IN1 = 1;
-        MOTOR1_IN2 = 0;
-        MOTOR2_IN3 = 1;
-        MOTOR2_IN4 = 0;
-    }
+    MOTOR1_IN1 = 1;
+    MOTOR1_IN2 = 0;
+    MOTOR2_IN3 = 1;
+    MOTOR2_IN4 = 0;
     delay_ms(motorTime);
     disableMotors();
 }
 
-void moveMotor_Opposite(int motor) {
+void moveMotor_Opposite(void) {
     enableMotors();
-    if (motor == 1) {
-        MOTOR1_IN1 = 0;
-        MOTOR1_IN2 = 1;
-    } else if (motor == 2) {
-        MOTOR2_IN3 = 0;
-        MOTOR2_IN4 = 1;
-    } else {
-        MOTOR1_IN1 = 0;
-        MOTOR1_IN2 = 1;
-        MOTOR2_IN3 = 0;
-        MOTOR2_IN4 = 1;
-    } 
+    MOTOR1_IN1 = 0;
+    MOTOR1_IN2 = 1;
+    MOTOR2_IN3 = 0;
+    MOTOR2_IN4 = 1;
     delay_ms(motorTime);
     disableMotors();
 }
