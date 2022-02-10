@@ -29,13 +29,20 @@ void main(void) {
     INTCONbits.GIE = 1;     // Enable global interrupt
     INTCONbits.INT0IE = 1;  // Enable int for RB0
 
+    bool hasMoved = true;
+    enableMotors();
+    manualBrake();
+    
     while(1) {
-        if (isDark() && isWet())  {
+        if (MOIST_SENS ==0 && LDR ==0)  {
             moveMotor();
             outside = true;
-            delay_ms(1000);
+            delay_ms(10000000);
             manualBrake();
-        } else {
+            delay_ms(10000000);
+            
+            hasMoved = false;
+        }else{
             manualBrake();
         }
     }
@@ -91,33 +98,30 @@ void disableMotors(void) {
 }
 
 void moveMotor(void) {
-    enableMotors();
+    
     MOTOR1_IN1 = 1;
     MOTOR1_IN2 = 0;
     MOTOR2_IN3 = 1;
     MOTOR2_IN4 = 0;
     delay_ms(motorTime);
-    disableMotors();
 }
 
 void moveMotor_Opposite(void) {
-    enableMotors();
+    
     MOTOR1_IN1 = 0;
     MOTOR1_IN2 = 1;
     MOTOR2_IN3 = 0;
     MOTOR2_IN4 = 1;
     delay_ms(motorTime);
-    disableMotors();
 }
 
 void manualBrake(void) {
-    enableMotors();
+    
     MOTOR1_IN1 = 0;
     MOTOR1_IN2 = 0;
-    MOTOR2_IN3 = 0;
-    MOTOR2_IN4 = 0;
+    MOTOR2_IN3 = 1;
+    MOTOR2_IN4 = 1;
     delay_ms(motorTime);
-    disableMotors();
 }
 
 
