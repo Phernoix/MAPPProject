@@ -18,6 +18,7 @@ void enableMotors(void);
 void disableMotors(void);
 void moveMotor(void);
 void moveMotor_Opposite(void);
+void manualBrake(void);
 
 int motorTime = 1000;
 bool outside = false;
@@ -32,6 +33,10 @@ void main(void) {
         if (isDark() && isWet())  {
             moveMotor();
             outside = true;
+            delay_ms(1000);
+            manualBrake();
+        } else {
+            manualBrake();
         }
     }
     
@@ -101,6 +106,16 @@ void moveMotor_Opposite(void) {
     MOTOR1_IN2 = 1;
     MOTOR2_IN3 = 0;
     MOTOR2_IN4 = 1;
+    delay_ms(motorTime);
+    disableMotors();
+}
+
+void manualBrake(void) {
+    enableMotors();
+    MOTOR1_IN1 = 0;
+    MOTOR1_IN2 = 0;
+    MOTOR2_IN3 = 0;
+    MOTOR2_IN4 = 0;
     delay_ms(motorTime);
     disableMotors();
 }
