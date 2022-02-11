@@ -14,34 +14,33 @@ void moveMotor_Opposite(void);
 int motorTime = 1000;
 int stopMotorTime = 2000;
 bool outside = false;
+bool overridden = false;
+bool outsideTemp = false;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
     TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
-    //INTCONbits.GIE = 1;     // Enable global interrupt
-    //INTCONbits.INT0IE = 1;  // Enable int for RB0
+    INTCONbits.GIE = 1;     // Enable global interrupt
+    INTCONbits.INT0IE = 1;  // Enable int for RB0
     
-    /*if (!isDark() && !isWet())  {
-        moveMotor();
-        outside = true;    
-    }*/
-    
-    while(1) {
-        if (LDR == 1) {
-            PORTD = 0x00;
-        } else {
-            PORTD = 0xFF;
+    while(1) {                
+        if (!outside) {
+            if (isDark() && isWet())  {
+                moveMotor();
+                outside = true;    
+            }
         }
-        
-    }
+    } 
 }
+    
+
  
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
  * When LDR reads 0, it means it is bright (there is light)
  * When LDR reads 1, it means it is dim
  */
 int isDark() {              
-    if (LDR == 0)
+    if (LDR == 1)
         return 1;
     
     return 0;
@@ -62,11 +61,11 @@ int isWet(void) {
 
 
 void interrupt overrideButton_isr(void) {
-    //if (outside) {
-        INTCONbits.INT0IF = 0;      //clear flag
+    INTCONbits.INT0IF = 0;      //clear flag
+    if (outside) {
         moveMotor_Opposite();
         outside = false;
-    //}
+    }
 }
 
 
@@ -80,14 +79,15 @@ void moveMotor(void) {
     delay_ms(motorTime);
     PORTDbits.RD3 = 0; // stops Motor2
     delay_ms(stopMotorTime);
-
+    
+    return;
 }
 
 void moveMotor_Opposite(void) {
     PORTD = 0b00101000;
     delay_ms(motorTime);
-    PORTD = 0; // stops Motor2
+    PORTDbits.RD3 = 0; // stops Motor2
     delay_ms(stopMotorTime);
+    
+    return;
 }
-
-
