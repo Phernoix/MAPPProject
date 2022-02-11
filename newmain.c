@@ -18,24 +18,22 @@ bool outside = false;
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
     TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
-    INTCONbits.GIE = 1;     // Enable global interrupt
-    INTCONbits.INT0IE = 1;  // Enable int for RB0
+    //INTCONbits.GIE = 1;     // Enable global interrupt
+    //INTCONbits.INT0IE = 1;  // Enable int for RB0
     
-    /*while(1) {
-        if (MOIST_SENS ==0 && LDR ==0)  {
-            moveMotor();
-            outside = true;
-            delay_ms(10000000);
-            manualBrake();
-            delay_ms(10000000);
-            
-            hasMoved = false;
-        }else{
-            manualBrake();
-        }
+    /*if (!isDark() && !isWet())  {
+        moveMotor();
+        outside = true;    
     }*/
-       
-   moveMotor();
+    
+    while(1) {
+        if (LDR == 1) {
+            PORTD = 0x00;
+        } else {
+            PORTD = 0xFF;
+        }
+        
+    }
 }
  
 /* This function turns off LEDs at PORTD if the LDR detects light (use phone flashlight)
@@ -43,7 +41,7 @@ void main(void) {
  * When LDR reads 1, it means it is dim
  */
 int isDark() {              
-    if (LDR == 1)
+    if (LDR == 0)
         return 1;
     
     return 0;
