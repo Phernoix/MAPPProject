@@ -15,8 +15,7 @@ int motorTime = 1000;
 int stopMotorTime = 2000;
 bool b = true;
 bool outside = false;
-bool overridden = false;
-bool outsideTemp = false;
+bool disabled = true;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
@@ -32,6 +31,14 @@ void main(void) {
             moveMotor_Opposite();
             outside = false;    
         }
+        
+        
+        if (PORTBbits.RB0 == 1) {
+            delay_ms(10);
+        INTCONbits.INT0IE = 1;  // Enable int for RB0
+        b = !b;
+        }
+        
 
     } 
 }
@@ -68,14 +75,22 @@ void interrupt overrideButton_isr(void) {
     
     
     switch(b){
-        case 0: moveMotor();PORTDbits.RD3 = 0;
-        break;
-        case 1: moveMotor_Opposite();PORTDbits.RD3 = 0;
-        break;
+        case 0: 
+            moveMotor();
+            PORTDbits.RD3 = 0;    
+            INTCONbits.INT0IE = 0;  // Enable int for RB0
+            break;
+        case 1: 
+            moveMotor_Opposite();
+            PORTDbits.RD3 = 0;    
+            INTCONbits.INT0IE = 0;  // Enable int for RB0
+            break;
         default:
             break;
     }
-    b = !b;
+    disabled = true;
+
+
 }
 
 
