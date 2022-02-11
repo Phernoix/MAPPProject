@@ -68,21 +68,24 @@ int isWet(void) {
  * One for bringing in clothes
  * Another one for bringing out clothes
  */
-void interrupt buttonISR(void) {
-    
+void interrupt buttonISR(void) {    
     if (INTCONbits.INT0IF == 1) 
         outButton_isr();
     if (INTCON3bits.INT2IF == 1)
         inButton_isr();
-
 }
 
 void outButton_isr(void) {
+    moveMotor();
+    outside = true;
+    overriden = false;
     INTCONbits.INT0IF = 0;      //clear flag
-    
 }
 
 void inButton_isr(void) {
+    moveMotor_Opposite();
+    outside = false;
+    overriden = true;
     INTCON3bits.INT2IF = 0; //clear flag
 }
 
@@ -95,8 +98,6 @@ void moveMotor(void) {
     delay_ms(motorTime);
     MOTOR_EN = 0; // stops Motor2
     delay_ms(stopMotorTime);
-    
-    return;
 }
 
 void moveMotor_Opposite(void) {
@@ -104,6 +105,4 @@ void moveMotor_Opposite(void) {
     delay_ms(motorTime);
     MOTOR_EN = 0; // stops Motor2
     delay_ms(stopMotorTime);
-    
-    return;
 }
