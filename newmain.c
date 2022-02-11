@@ -35,8 +35,9 @@ void main(void) {
         
         if (PORTBbits.RB0 == 1) {
             delay_ms(10);
-        INTCONbits.INT0IE = 1;  // Enable int for RB0
-        b = !b;
+            INTCONbits.INT0IE = 1;  // Enable int for RB0
+            b = !b;
+            outside = !outside;
         }
         
 
