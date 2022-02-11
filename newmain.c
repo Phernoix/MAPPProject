@@ -13,6 +13,7 @@ void moveMotor_Opposite(void);
 
 int motorTime = 1000;
 int stopMotorTime = 2000;
+int b = 0;
 bool outside = false;
 bool overridden = false;
 bool outsideTemp = false;
@@ -20,15 +21,10 @@ bool outsideTemp = false;
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
     TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
-    //INTCONbits.GIE = 1;     // Enable global interrupt
-    //INTCONbits.INT0IE = 1;  // Enable int for RB0
+    INTCONbits.GIE = 1;     // Enable global interrupt
+    INTCONbits.INT0IE = 1;  // Enable int for RB0
     
     while(1) { 
-        if (!outside && !isDark() && !isWet()) {
-            INTCONbits.GIE = 1; // Enable global interrupt
-            INTCONbits.INT0IE = 1; // Enable int for RB0
-            outside = false;
-        }
        
         if (outside ==true && isDark() && isWet()) { 
             // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
@@ -68,9 +64,9 @@ int isWet(void) {
 
 
 void interrupt overrideButton_isr(void) {
-    INTCONbits.INT0IF = 1;      //clear flag
+    INTCONbits.INT0IF = 0;      //clear flag
     
-    
+    /*
     if (!outside) {
         moveMotor();
         while(1){
@@ -80,7 +76,7 @@ void interrupt overrideButton_isr(void) {
         }
         delay_ms(1000);
     }
-    if (outside ) {
+    if (outside) {
         moveMotor_Opposite();
         while(1){
             if (PORTBbits.RB0 == 1){
@@ -88,7 +84,16 @@ void interrupt overrideButton_isr(void) {
             }
         }
         delay_ms(1000);
-    } 
+    }*/
+    
+    switch(b){
+        case 0: moveMotor();PORTDbits.RD3 = 0;b = 1;
+        break;
+        case 1: moveMotor_Opposite();PORTDbits.RD3 = 0;b = 0;
+        break;
+        default:
+            break;
+    }
 }
 
 
