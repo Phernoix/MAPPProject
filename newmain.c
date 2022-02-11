@@ -13,7 +13,7 @@ void moveMotor_Opposite(void);
 
 int motorTime = 1000;
 int stopMotorTime = 2000;
-int b = 0;
+bool b = true;
 bool outside = false;
 bool overridden = false;
 bool outsideTemp = false;
@@ -66,34 +66,16 @@ int isWet(void) {
 void interrupt overrideButton_isr(void) {
     INTCONbits.INT0IF = 0;      //clear flag
     
-    /*
-    if (!outside) {
-        moveMotor();
-        while(1){
-            if (PORTBbits.RB0 == 1){
-                break;
-            }
-        }
-        delay_ms(1000);
-    }
-    if (outside) {
-        moveMotor_Opposite();
-        while(1){
-            if (PORTBbits.RB0 == 1){
-                break;
-            }
-        }
-        delay_ms(1000);
-    }*/
     
     switch(b){
-        case 0: moveMotor();PORTDbits.RD3 = 0;b = 1;
+        case 0: moveMotor();PORTDbits.RD3 = 0;
         break;
-        case 1: moveMotor_Opposite();PORTDbits.RD3 = 0;b = 0;
+        case 1: moveMotor_Opposite();PORTDbits.RD3 = 0;
         break;
         default:
             break;
     }
+    b = !b;
 }
 
 
