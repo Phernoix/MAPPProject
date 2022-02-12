@@ -24,7 +24,7 @@ CLEAN_SUBPROJECTS=${CLEAN_SUBPROJECTS_${SUBPROJECTS}}
 
 
 # Project Name
-PROJECTNAME=New_retry_project.X
+PROJECTNAME=MAPPProject
 
 # Active Configuration
 DEFAULTCONF=default

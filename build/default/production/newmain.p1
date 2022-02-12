@@ -1,8 +1,67 @@
 Version 3.2 HI-TECH Software Intermediate Code
 [p mainexit ]
-"4565 C:\Program Files (x86)\Microchip\xc8\v1.35\include\pic18f4550.h
+"4173 C:\Program Files (x86)\Microchip\xc8\v1.35\include\pic18f4550.h
+[v _TRISB `Vuc ~T0 @X0 0 e@3987 ]
+"4565
 [v _TRISD `Vuc ~T0 @X0 0 e@3989 ]
-"2989
+"9165
+[s S548 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S548 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE_GIEL GIE_GIEH ]
+"9175
+[s S549 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S549 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE PEIE GIE ]
+"9185
+[s S550 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S550 . RBIF INT0IF TMR0IF RBIE INT0IE TMR0IE GIEL GIEH ]
+"9195
+[s S551 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S551 . . INT0F T0IF . INT0E T0IE PEIE GIE ]
+"9205
+[s S552 :6 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S552 . . GIEL GIEH ]
+"9164
+[u S547 `S548 1 `S549 1 `S550 1 `S551 1 `S552 1 ]
+[n S547 . . . . . . ]
+"9211
+[v _INTCONbits `VS547 ~T0 @X0 0 e@4082 ]
+"8998
+[s S541 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S541 . INT1IF INT2IF . INT1IE INT2IE . INT1IP INT2IP ]
+"9008
+[s S542 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S542 . INT1F INT2F . INT1E INT2E . INT1P INT2P ]
+"8997
+[u S540 `S541 1 `S542 1 ]
+[n S540 . . . ]
+"9019
+[v _INTCON3bits `VS540 ~T0 @X0 0 e@4080 ]
+"9 newmain.c
+[v _isDark `(i ~T0 @X0 0 ef ]
+"10
+[v _isWet `(i ~T0 @X0 0 ef ]
+"15
+[v _moveMotor_Opposite `(v ~T0 @X0 0 ef ]
+"2733 C:\Program Files (x86)\Microchip\xc8\v1.35\include\pic18f4550.h
+[s S201 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S201 . RB0 RB1 RB2 RB3 RB4 RB5 RB6 RB7 ]
+"2743
+[s S202 :1 `uc 1 :1 `uc 1 :1 `uc 1 :2 `uc 1 :1 `uc 1 :1 `uc 1 :1 `uc 1 ]
+[n S202 . INT0 INT1 INT2 . PGM PGC PGD ]
+"2752
+[s S203 :3 `uc 1 :1 `uc 1 ]
+[n S203 . . CCP2_PA2 ]
+"2732
+[u S200 `S201 1 `S202 1 `S203 1 ]
+[n S200 . . . . ]
+"2757
+[v _PORTBbits `VS200 ~T0 @X0 0 e@3969 ]
+"12 newmain.c
+[v _outButton_isr `(v ~T0 @X0 0 ef ]
+"13
+[v _inButton_isr `(v ~T0 @X0 0 ef ]
+"14
+[v _moveMotor `(v ~T0 @X0 0 ef ]
+"2989 C:\Program Files (x86)\Microchip\xc8\v1.35\include\pic18f4550.h
 [v _PORTD `Vuc ~T0 @X0 0 e@3971 ]
 "5 delays.h
 [v _delay_ms `(v ~T0 @X0 0 ef1`ui ]
@@ -4165,57 +4224,242 @@ Version 3.2 HI-TECH Software Intermediate Code
 [; ;pic18.h: 156: extern __nonreentrant void _delay3(unsigned char);
 [; ;delays.h: 5: extern void delay_ms(unsigned int i);
 [; ;delays.h: 7: extern void delay_us(unsigned int i);
-"4 newmain.c
-[v _j `uc ~T0 @X0 1 e ]
-[; ;newmain.c: 4: unsigned char j;
-"6
+[; ;stdbool.h: 12: typedef unsigned char bool;
+[; ;newmain.c: 9: int isDark(void);
+[; ;newmain.c: 10: int isWet(void);
+[; ;newmain.c: 11: void interrupt buttonISR(void);
+[; ;newmain.c: 12: void outButton_isr(void);
+[; ;newmain.c: 13: void inButton_isr(void);
+[; ;newmain.c: 14: void moveMotor(void);
+[; ;newmain.c: 15: void moveMotor_Opposite(void);
+"17 newmain.c
+[v _outside `uc ~T0 @X0 1 e ]
+[i _outside
+-> -> 0 `i `uc
+]
+[; ;newmain.c: 17: bool outside = 0;
+"18
+[v _overriden `uc ~T0 @X0 1 e ]
+[i _overriden
+-> -> 0 `i `uc
+]
+[; ;newmain.c: 18: bool overriden = 0;
+"20
 [v _main `(v ~T0 @X0 1 ef ]
 {
-[; ;newmain.c: 6: void main(void) {
+[; ;newmain.c: 20: void main(void) {
 [e :U _main ]
 [f ]
+[; ;newmain.c: 21: TRISB = 0b11111111;
+"21
+[e = _TRISB -> -> 255 `i `uc ]
 [; ;newmain.c: 22: TRISD = 0b00000000;
 "22
 [e = _TRISD -> -> 0 `i `uc ]
-[; ;newmain.c: 23: while (1)
+[; ;newmain.c: 23: INTCONbits.GIE = 1;
 "23
-[e :U 559 ]
-[; ;newmain.c: 24: {
+[e = . . _INTCONbits 1 7 -> -> 1 `i `uc ]
+[; ;newmain.c: 24: INTCONbits.INT0IE = 1;
 "24
-{
-[; ;newmain.c: 26: PORTD= 0b00101011;
-"26
-[e = _PORTD -> -> 43 `i `uc ]
-[; ;newmain.c: 27: delay_ms(1000);
+[e = . . _INTCONbits 0 4 -> -> 1 `i `uc ]
+[; ;newmain.c: 25: INTCON3bits.INT2IE = 1;
+"25
+[e = . . _INTCON3bits 0 4 -> -> 1 `i `uc ]
+[; ;newmain.c: 27: while(1) {
 "27
-[e ( _delay_ms (1 -> -> 1000 `i `ui ]
-[; ;newmain.c: 28: PORTDbits.RD5 = 0; PORTDbits.RD4 = 1;
+[e :U 559 ]
+{
+[; ;newmain.c: 28: if (!overriden) {
 "28
-[e = . . _PORTDbits 0 5 -> -> 0 `i `uc ]
-[e = . . _PORTDbits 0 4 -> -> 1 `i `uc ]
-[; ;newmain.c: 29: delay_ms(1000);
+[e $ ! ! != -> _overriden `i -> -> -> 0 `i `uc `i 561  ]
+{
+[; ;newmain.c: 29: if (outside && isDark() && isWet()) {
 "29
-[e ( _delay_ms (1 -> -> 1000 `i `ui ]
-[; ;newmain.c: 30: PORTDbits.RD0 = 0;
-"30
-[e = . . _PORTDbits 0 0 -> -> 0 `i `uc ]
-[; ;newmain.c: 31: delay_ms(1000);
-"31
-[e ( _delay_ms (1 -> -> 1000 `i `ui ]
-[; ;newmain.c: 32: PORTDbits.RD3 = 0;
+[e $ ! && && != -> _outside `i -> -> -> 0 `i `uc `i != ( _isDark ..  -> 0 `i != ( _isWet ..  -> 0 `i 562  ]
+{
+[; ;newmain.c: 32: moveMotor_Opposite();
 "32
-[e = . . _PORTDbits 0 3 -> -> 0 `i `uc ]
-[; ;newmain.c: 33: delay_ms(1000);
+[e ( _moveMotor_Opposite ..  ]
+[; ;newmain.c: 33: outside = 0;
 "33
-[e ( _delay_ms (1 -> -> 1000 `i `ui ]
+[e = _outside -> -> 0 `i `uc ]
+"34
+}
+[e :U 562 ]
 "35
 }
+[e :U 561 ]
+"36
+}
 [e :U 558 ]
-"23
+"27
 [e $U 559  ]
 [e :U 560 ]
+[; ;newmain.c: 34: }
 [; ;newmain.c: 35: }
-[; ;newmain.c: 38: }
-"38
+[; ;newmain.c: 36: }
+[; ;newmain.c: 37: }
+"37
 [e :UE 557 ]
+}
+"44
+[v _isDark `(i ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 44: int isDark() {
+[e :U _isDark ]
+[f ]
+[; ;newmain.c: 45: if (PORTBbits.RB3 == 1)
+"45
+[e $ ! == -> . . _PORTBbits 0 3 `i -> 1 `i 564  ]
+[; ;newmain.c: 46: return 1;
+"46
+[e ) -> 1 `i ]
+[e $UE 563  ]
+[e :U 564 ]
+[; ;newmain.c: 48: return 0;
+"48
+[e ) -> 0 `i ]
+[e $UE 563  ]
+[; ;newmain.c: 49: }
+"49
+[e :UE 563 ]
+}
+"57
+[v _isWet `(i ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 57: int isWet(void) {
+[e :U _isWet ]
+[f ]
+[; ;newmain.c: 58: if(PORTBbits.RB5 == 1)
+"58
+[e $ ! == -> . . _PORTBbits 0 5 `i -> 1 `i 566  ]
+[; ;newmain.c: 59: return 1;
+"59
+[e ) -> 1 `i ]
+[e $UE 565  ]
+[e :U 566 ]
+[; ;newmain.c: 61: return 0;
+"61
+[e ) -> 0 `i ]
+[e $UE 565  ]
+[; ;newmain.c: 62: }
+"62
+[e :UE 565 ]
+}
+[v F4451 `(v ~T0 @X0 1 tf ]
+"69
+[v _buttonISR `IF4451 ~T0 @X0 1 e ]
+{
+[; ;newmain.c: 69: void interrupt buttonISR(void) {
+[e :U _buttonISR ]
+[f ]
+[; ;newmain.c: 70: if (INTCONbits.INT0IF == 1)
+"70
+[e $ ! == -> . . _INTCONbits 0 1 `i -> 1 `i 568  ]
+[; ;newmain.c: 71: outButton_isr();
+"71
+[e ( _outButton_isr ..  ]
+[e :U 568 ]
+[; ;newmain.c: 72: if (INTCON3bits.INT2IF == 1)
+"72
+[e $ ! == -> . . _INTCON3bits 0 1 `i -> 1 `i 569  ]
+[; ;newmain.c: 73: inButton_isr();
+"73
+[e ( _inButton_isr ..  ]
+[e :U 569 ]
+[; ;newmain.c: 74: }
+"74
+[e :UE 567 ]
+}
+"76
+[v _outButton_isr `(v ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 76: void outButton_isr(void) {
+[e :U _outButton_isr ]
+[f ]
+[; ;newmain.c: 77: moveMotor();
+"77
+[e ( _moveMotor ..  ]
+[; ;newmain.c: 78: INTCONbits.INT0IF = 0;
+"78
+[e = . . _INTCONbits 0 1 -> -> 0 `i `uc ]
+[; ;newmain.c: 79: }
+"79
+[e :UE 570 ]
+}
+"81
+[v _inButton_isr `(v ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 81: void inButton_isr(void) {
+[e :U _inButton_isr ]
+[f ]
+[; ;newmain.c: 82: moveMotor_Opposite();
+"82
+[e ( _moveMotor_Opposite ..  ]
+[; ;newmain.c: 83: INTCON3bits.INT2IF = 0;
+"83
+[e = . . _INTCON3bits 0 1 -> -> 0 `i `uc ]
+[; ;newmain.c: 84: }
+"84
+[e :UE 571 ]
+}
+"89
+[v _moveMotor `(v ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 89: void moveMotor(void) {
+[e :U _moveMotor ]
+[f ]
+[; ;newmain.c: 90: PORTD = 0b00101011;
+"90
+[e = _PORTD -> -> 43 `i `uc ]
+[; ;newmain.c: 91: delay_ms(1000);
+"91
+[e ( _delay_ms (1 -> -> 1000 `i `ui ]
+[; ;newmain.c: 92: PORTDbits.RD3 = 0;
+"92
+[e = . . _PORTDbits 0 3 -> -> 0 `i `uc ]
+[; ;newmain.c: 93: delay_ms(2000);
+"93
+[e ( _delay_ms (1 -> -> 2000 `i `ui ]
+[; ;newmain.c: 94: PORTDbits.RD0 = 0;
+"94
+[e = . . _PORTDbits 0 0 -> -> 0 `i `uc ]
+[; ;newmain.c: 95: delay_ms(2000);
+"95
+[e ( _delay_ms (1 -> -> 2000 `i `ui ]
+[; ;newmain.c: 96: }
+"96
+[e :UE 572 ]
+}
+"98
+[v _moveMotor_Opposite `(v ~T0 @X0 1 ef ]
+{
+[; ;newmain.c: 98: void moveMotor_Opposite(void) {
+[e :U _moveMotor_Opposite ]
+[f ]
+[; ;newmain.c: 99: PORTD = 0b00001011;
+"99
+[e = _PORTD -> -> 11 `i `uc ]
+[; ;newmain.c: 100: PORTDbits.RD5 = 0; PORTDbits.RD4 = 1;
+"100
+[e = . . _PORTDbits 0 5 -> -> 0 `i `uc ]
+[e = . . _PORTDbits 0 4 -> -> 1 `i `uc ]
+[; ;newmain.c: 101: delay_ms(1000);
+"101
+[e ( _delay_ms (1 -> -> 1000 `i `ui ]
+[; ;newmain.c: 102: PORTDbits.RD3 = 0;
+"102
+[e = . . _PORTDbits 0 3 -> -> 0 `i `uc ]
+[; ;newmain.c: 103: delay_ms(2000);
+"103
+[e ( _delay_ms (1 -> -> 2000 `i `ui ]
+[; ;newmain.c: 104: PORTDbits.RD0 = 0;
+"104
+[e = . . _PORTDbits 0 0 -> -> 0 `i `uc ]
+[; ;newmain.c: 105: delay_ms(2000);
+"105
+[e ( _delay_ms (1 -> -> 2000 `i `ui ]
+[; ;newmain.c: 107: }
+"107
+[e :UE 573 ]
 }
