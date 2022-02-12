@@ -35,7 +35,7 @@ void main(void) {
                 outside = false;    
             }  
         }
-    } 
+    }
 }
 
  
@@ -77,32 +77,32 @@ void interrupt buttonISR(void) {
 
 void outButton_isr(void) {
     moveMotor();
-    outside = true;
-    overriden = false;
-    INTCONbits.INT0IF = 0;      //clear flag
+    INTCONbits.INT0IF = 0;
 }
 
 void inButton_isr(void) {
     moveMotor_Opposite();
-    outside = false;
-    overriden = true;
-    INTCON3bits.INT2IF = 0; //clear flag
+    INTCON3bits.INT2IF = 0;
 }
 
-/* Code for Motor:
- * We are using a H bridge for the motor
- * https://www.modularcircuits.com/blog/articles/h-bridge-secrets/h-bridges-the-basics
+/* Code for motors
+ * We will only be using motor 2
  */
 void moveMotor(void) {
-    PORTD = 0b00011000;
-    delay_ms(motorTime);
-    MOTOR_EN = 0; // stops Motor2
-    delay_ms(stopMotorTime);
+    PORTD = 0b00101011; // turns both motors
+    delay_ms(1000);
+    PORTDbits.RD3 = 0; // stops Motor2
+    delay_ms(2000);
+    PORTDbits.RD0 = 0; // stops Motor1
+    delay_ms(2000);
 }
 
 void moveMotor_Opposite(void) {
-    PORTD = 0b00101000;
-    delay_ms(motorTime);
-    MOTOR_EN = 0; // stops Motor2
-    delay_ms(stopMotorTime);
+    PORTD = 0b00011011; // turns both motors
+    delay_ms(1000);
+    PORTDbits.RD3 = 0; // stops Motor2
+    delay_ms(2000);
+    PORTDbits.RD0 = 0; // stops Motor1
+    delay_ms(2000);
+
 }
