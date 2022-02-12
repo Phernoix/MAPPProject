@@ -16,6 +16,7 @@ int stopMotorTime = 2000;
 bool b = true;
 bool outside = false;
 bool disabled = true;
+bool overridden = false;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
@@ -24,20 +25,25 @@ void main(void) {
     INTCONbits.INT0IE = 1;  // Enable int for RB0
     
     while(1) { 
-       
-        if (outside ==true && isDark() && isWet()) { 
-            // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
-            //ONLY CODE THAT WILL STOP THE FUCKING MOTOR
-            moveMotor_Opposite();
-            outside = false;    
+        
+        if (PORTBbits.RB2 == 1) {
+            overridden = !overridden;
         }
         
-        
-        if (PORTBbits.RB0 == 1) {
-            delay_ms(10);
-            INTCONbits.INT0IE = 1;  // Enable int for RB0
-            b = !b;
-            outside = !outside;
+        if (!overridden) {   //not overridden
+            if (outside ==true && isDark() && isWet()) { 
+                // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
+                //ONLY CODE THAT WILL STOP THE FUCKING MOTOR
+                moveMotor_Opposite(); //bring in clothes
+                outside = false;    
+            }
+        } else {
+            if (PORTBbits.RB0 == 1) {
+                delay_ms(10);
+                INTCONbits.INT0IE = 1;  // Enable int for RB0
+                b = !b;
+                outside = !outside;
+            }
         }
         
 
