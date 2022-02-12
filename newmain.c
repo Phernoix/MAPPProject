@@ -20,7 +20,7 @@ bool overridden = false;
 
 void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
-    TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
+    TRISD = 0b00000000;     // For H-bridge (motor driver)
     INTCONbits.GIE = 1;     // Enable global interrupt
     
     while(1) { 
@@ -30,8 +30,8 @@ void main(void) {
             delay_ms(10);
         }
         
-        if (!overridden) {   //not overridden
-            if (outside ==true && isDark() && isWet()) { 
+        if (!overridden) {   // not overridden
+            if (outside && isDark() && isWet()) { 
                 // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
                 //ONLY CODE THAT WILL STOP THE FUCKING MOTOR
                 motorBringIn(); //bring in clothes
