@@ -19,7 +19,7 @@ bool outside = false;
 bool overridden = false;
 
 void main(void) {
-    TRISB = 0b11111111;     // For LDR and Moisture sensor
+    TRISB = 0b11111111;     // For Buttons, LDR and Moisture sensor
     TRISD = 0b00000000;     // For H-bridge (motor driver)
     INTCONbits.GIE = 1;     // Enable global interrupt
     
@@ -34,7 +34,7 @@ void main(void) {
             if (outside && isDark() && isWet()) { 
                 // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
                 //ONLY CODE THAT WILL STOP THE FUCKING MOTOR
-                motorBringIn(); //bring in clothes
+                motorBringIn();
                 outside = false;    
             }
         } else {  // overridden
