@@ -4,18 +4,18 @@
 
 #define LDR PORTBbits.RB3
 #define MOIST_SENS PORTBbits.RB5
+#define MOTOR2_EN PORTDbits.RD3
 
 int isDark(void);
 int isWet(void);
 void interrupt overrideButton_isr(void);
-void moveMotor(void);
-void moveMotor_Opposite(void);
+void motorBringIn(void);
+void motorBringOut(void);
 
 int motorTime = 1000;
 int stopMotorTime = 2000;
-bool b = false;
+bool bringIn = false;
 bool outside = false;
-bool disabled = true;
 bool overridden = false;
 
 void main(void) {
@@ -34,14 +34,14 @@ void main(void) {
             if (outside ==true && isDark() && isWet()) { 
                 // dont ever change this code, what this does is: when dark and rain and outside it will spin back and it will STOP
                 //ONLY CODE THAT WILL STOP THE FUCKING MOTOR
-                moveMotor_Opposite(); //bring in clothes
+                motorBringIn(); //bring in clothes
                 outside = false;    
             }
-        } else {
-            if (PORTBbits.RB0 == 1) {
+        } else {  // overridden
+            if (PORTBbits.RB0 == 1) {  // we can't set flags inside interrupt function
                 delay_ms(10);
                 INTCONbits.INT0IE = 1;  // Enable int for RB0
-                b = !b;
+                bringIn = !bringIn;
                 outside = !outside;
             }
         }
@@ -79,25 +79,21 @@ int isWet(void) {
 
 void interrupt overrideButton_isr(void) {
     INTCONbits.INT0IF = 0;      //clear flag
-    
-    
-    switch(b){
+       
+    switch(bringIn){
         case 0: 
-            moveMotor();
-            PORTDbits.RD3 = 0;    
+            motorBringOut();
+            MOTOR2_EN = 0;    
             INTCONbits.INT0IE = 0;  // Enable int for RB0
             break;
         case 1: 
-            moveMotor_Opposite();
-            PORTDbits.RD3 = 0;    
+            motorBringIn();
+            MOTOR2_EN = 0;    
             INTCONbits.INT0IE = 0;  // Enable int for RB0
             break;
         default:
             break;
     }
-    disabled = true;
-
-
 }
 
 
@@ -106,19 +102,19 @@ void interrupt overrideButton_isr(void) {
  * https://www.modularcircuits.com/blog/articles/h-bridge-secrets/h-bridges-the-basics
  */
 
-void moveMotor(void) {
+void motorBringIn(void) {
     PORTD = 0b00011000;
     delay_ms(motorTime);
-    PORTDbits.RD3 = 0; // stops Motor2
+    MOTOR2_EN = 0; // stops Motor2
     delay_ms(stopMotorTime);
     
     return;
 }
 
-void moveMotor_Opposite(void) {
+void motorBringOut(void) {
     PORTD = 0b00101000;
     delay_ms(motorTime);
-    PORTDbits.RD3 = 0; // stops Motor2
+    MOTOR2_EN = 0; // stops Motor2
     delay_ms(stopMotorTime);
     
     return;
