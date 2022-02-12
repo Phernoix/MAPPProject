@@ -14,8 +14,6 @@ void inButton_isr(void);
 void moveMotor(void);
 void moveMotor_Opposite(void);
 
-int motorTime = 1000;
-int stopMotorTime = 2000;
 bool outside = false;
 bool overriden = false;
 
@@ -98,7 +96,8 @@ void moveMotor(void) {
 }
 
 void moveMotor_Opposite(void) {
-    PORTD = 0b00011011; // turns both motors
+    PORTD = 0b00001011; // turns both motors
+    PORTDbits.RD5 = 0; PORTDbits.RD4 = 1;
     delay_ms(1000);
     PORTDbits.RD3 = 0; // stops Motor2
     delay_ms(2000);
