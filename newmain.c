@@ -13,7 +13,7 @@ void moveMotor_Opposite(void);
 
 int motorTime = 1000;
 int stopMotorTime = 2000;
-bool b = true;
+bool b = false;
 bool outside = false;
 bool disabled = true;
 bool overridden = false;
@@ -22,12 +22,12 @@ void main(void) {
     TRISB = 0b11111111;     // For LDR and Moisture sensor
     TRISD = 0b00000000;     // RD7 to RD0 are connected to LEDs
     INTCONbits.GIE = 1;     // Enable global interrupt
-    INTCONbits.INT0IE = 1;  // Enable int for RB0
     
     while(1) { 
-        
+        /* override mode */
         if (PORTBbits.RB2 == 1) {
             overridden = !overridden;
+            delay_ms(10);
         }
         
         if (!overridden) {   //not overridden
